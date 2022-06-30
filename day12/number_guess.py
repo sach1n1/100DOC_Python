@@ -1,9 +1,9 @@
 import random
 from art import logo
+import os
 
-print(logo)
+clear = lambda: os.system('clear')
 
-print("Welcome to the Number Guess game!")
 
 HARD_LEVEL_TRIES = 10
 EASY_LEVEL_TRIES = 5
@@ -28,19 +28,33 @@ def check_guess(guessed, actual):
         print("Too Low!")
 
 
-lower_limit = random.randint(0, 100)
-upper_limit = random.randint(lower_limit + 100, lower_limit + 200)
-number = random.randint(lower_limit, upper_limit)
-print(f"I am thinking of a number between {lower_limit} and {upper_limit}.")
-tries = set_level(input("Choose a difficulty: Type 'easy' or 'hard':").lower())
+def game():
+    clear()
+    print(logo)
+    print("Welcome to the Number Guess game!")
+    lower_limit = random.randint(0, 100)
+    upper_limit = random.randint(lower_limit + 100, lower_limit + 200)
+    number = random.randint(lower_limit, upper_limit)
+    print(f"I am thinking of a number between {lower_limit} and {upper_limit}.")
+    tries = set_level(input("Choose a difficulty: Type 'easy' or 'hard':").lower())
 
-guess = None
+    guess = None
 
-while tries > 0 and guess != number:
-    print(f"you have {tries} tries remaining to guess the number.")
-    guess = int(input("Make a guess:"))
-    check_guess(guess, number)
-    tries -= 1
+    while tries > 0 and guess != number:
+        print(f"you have {tries} tries remaining to guess the number.")
+        guess = int(input("Make a guess:"))
+        check_guess(guess, number)
+        tries -= 1
 
-if tries == 0:
-    print("You have run out of guesses. You lose!!")
+    if tries == 0 and guess != number:
+        print("You have run out of guesses. You lose!!")
+
+    continue_game = input("Do you want to play another game?"
+                          "\nType 'yes' or 'no':").lower()
+    if continue_game == "yes":
+        game()
+    else:
+        return
+
+
+game()
