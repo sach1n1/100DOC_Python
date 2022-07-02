@@ -1,20 +1,24 @@
 from resources import MENU, resources
 
 money = 0.0
+coffee_io = True
 
 
 def take_input():
     coffee_type = ""
-    while coffee_type not in MENU:
+    switch_off = False
+    while coffee_type not in MENU and switch_off == False:
         coffee_type = input("What would you like? (espresso/latte/cappuccino):").lower()
         if coffee_type == "report":
             print(f"Milk: {resources['milk']}ml")
             print(f"Coffee: {resources['coffee']}g")
             print(f"Water: {resources['water']}ml")
             print(f"Money: ${money}")
+        elif coffee_type == "off":
+            switch_off = True
         elif coffee_type not in MENU:
             print("Your input is wrong! Try Again!")
-    return coffee_type
+    return coffee_type, switch_off
 
 
 def check_resources(coffee):
@@ -54,11 +58,13 @@ def process_transactions(coffee_type):
 
 
 def coffee_machine():
-    choice = take_input()
+    choice, machine_status_off = take_input()
+    if machine_status_off:
+        return False
     sufficient_resources = check_resources(choice)
     if sufficient_resources:
         process_transactions(choice)
 
 
-while True:
-    coffee_machine()
+while coffee_io:
+    coffee_io = coffee_machine()
