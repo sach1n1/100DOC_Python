@@ -24,7 +24,7 @@ colors = [(202, 164, 109), (238, 240, 245), (150, 75, 49), (223, 201, 135), (52,
 
 tim.setheading(225)
 tim.penup()
-tim.forward(500)
+tim.forward(550)
 tim.setheading(0)
 pos = tim.pos()
 
@@ -34,7 +34,7 @@ for i in range(1, 11):
         tim.color(random.choice(colors))
         tim.dot()
         tim.penup()
-        tim.forward(100)
-    tim.goto(pos[0], pos[1] + i*100)
+        tim.forward(80)
+    tim.goto(pos[0], pos[1] + i*80)
 
 screen.exitonclick()
