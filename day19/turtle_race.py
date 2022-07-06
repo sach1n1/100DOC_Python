@@ -1,5 +1,4 @@
 import random
-import turtle
 from turtle import Turtle, Screen
 
 
@@ -47,7 +46,7 @@ race_finish = False
 
 while not race_finish:
     for turtle in turtles:
-        rand_distance = random.randint(0,20)
+        rand_distance = random.randint(0, 20)
         turtle.forward(rand_distance)
     race_finish = check_coordinates()
 
