@@ -41,3 +41,11 @@ class Snake:
     def move_left(self):
         if self.snake_length[0].heading() != RIGHT:
             self.snake_length[0].setheading(LEFT)
+
+    def add_segment(self):
+        snake_segment = Turtle("square")
+        snake_segment.penup()
+        snake_segment.color("white")
+        last_segment_coordinates = self.snake_length[-1].pos()
+        snake_segment.goto(last_segment_coordinates)
+        self.snake_length.append(snake_segment)
