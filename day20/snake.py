@@ -36,17 +36,21 @@ while game_is_on:
         snake.add_segment()
         score.update_score()
 
-    if snake.snake_length[0].xcor() < -280 or  \
-       snake.snake_length[0].xcor() > 280 or  \
-       snake.snake_length[0].ycor() < -280 or \
-       snake.snake_length[0].ycor() > 280:
-        game_is_on = False
-        score.game_over()
+    if snake.snake_length[0].xcor() < -275 or  \
+       snake.snake_length[0].xcor() > 275 or  \
+       snake.snake_length[0].ycor() < -275 or \
+       snake.snake_length[0].ycor() > 275:
+        # game_is_on = False
+        score.reset()
+        snake.reset()
+        #score.game_over()
 
     for segment in snake.snake_length[1:]:
         if snake.snake_length[0].distance(segment) < 5:
-            game_is_on = False
-            score.game_over()
+            # game_is_on = False
+            score.reset()
+            snake.reset()
+            #score.game_over()
 
 
 screen.exitonclick()

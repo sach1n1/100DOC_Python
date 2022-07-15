@@ -21,6 +21,12 @@ class Snake:
             snake_segment.goto((snake_segment.xcor() - i*MOVE_DISTANCE, 0))
             self.snake_length.append(snake_segment)
 
+    def reset(self):
+        for segment in self.snake_length:
+            segment.reset()
+        self.snake_length.clear()
+        self.create_initial_segment()
+
     def move(self):
         for num in range(len(self.snake_length) - 1, 0, -1):
             self.snake_length[num].goto(self.snake_length[num - 1].position())
