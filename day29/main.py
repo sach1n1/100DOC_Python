@@ -2,10 +2,27 @@ from tkinter import *
 from tkinter import messagebox
 import random
 import pyperclip
+import json
 
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+
+def search():
+    try:
+        with open("data.json", "r") as pass_file:
+            data = json.load(pass_file)
+    except FileNotFoundError:
+        messagebox.showinfo("Oops", "No password database exists")
+    else:
+        try:
+            messagebox.showinfo("User Credentials",
+                                f"Email: {data[website_input.get()]['email']}\n"
+                                f"Password: {data[website_input.get()]['password']}")
+            pyperclip.copy(data[website_input.get()]['password'])
+        except KeyError as invalid_website:
+            messagebox.showinfo("Invalid Website", f"No data saved for {invalid_website}")
 
 
 def password_generator():
@@ -22,17 +39,29 @@ def password_generator():
 def on_add_click():
     if len(website_input.get()) == 0 or len(pass_input.get()) == 0 or len(email_input.get()) == 0:
         messagebox.showinfo("Empty Fields", "Please fill in all the required fileds.")
-
     else:
-        is_ok = messagebox.askokcancel(title=website_input.get(),
-                                       message=f"Details Entered:\n"
-                                               f"Email: {email_input.get()}\n"
-                                               f"Password: {pass_input.get()}")
-        if is_ok:
-            with open("pass.txt", "a") as pass_file:
-                    pass_file.write(f"{website_input.get()} | {email_input.get()} | {pass_input.get()}\n")
-                    website_input.delete(0, END)
-                    pass_input.delete(0, END)
+        new_data = {
+            website_input.get(): {
+                "email": email_input.get(),
+                "password": pass_input.get()
+            }
+        }
+        try:
+            pass_file = open("data.json", "r")
+        except FileNotFoundError:
+            with open("data.json", "w") as pass_file:
+                json.dump(new_data, pass_file, indent=4)
+        else:
+            data = json.load(pass_file)
+            data.update(new_data)
+            pass_file.close()
+            with open("data.json", "w") as pass_file:
+                json.dump(data, pass_file, indent=4)
+                website_input.delete(0, END)
+                pass_input.delete(0, END)
+        finally:
+            website_input.delete(0, END)
+            pass_input.delete(0, END)
 
 
 window = Tk()
@@ -53,8 +82,8 @@ email_label.grid(row=2, column=0, sticky="EW")
 password_label = Label(text="Password:", bg="white")
 password_label.grid(row=3, column=0, sticky="EW")
 
-website_input = Entry(width=35)
-website_input.grid(row=1, column=1, columnspan=2, sticky="EW")
+website_input = Entry(width=21)
+website_input.grid(row=1, column=1, sticky="EW")
 website_input.focus()
 
 email_input = Entry(width=35)
@@ -63,6 +92,9 @@ email_input.insert(END, "abc@abc.com")
 
 pass_input = Entry(width=21)
 pass_input.grid(row=3, column=1, sticky="EW")
+
+search_button = Button(text="Search", command=search)
+search_button.grid(row=1, column=2, sticky="EW")
 
 pass_gen_button = Button(text="Generate Password!", command=password_generator)
 pass_gen_button.grid(row=3, column=2, sticky="EW")
